@@ -9,6 +9,7 @@ module.exports = {
     },
   },
   plugins: [
+    `gatsby-plugin-netlify-cms`, // install and add this plugin to link your blog to netlify cms
     {
       resolve: `gatsby-source-filesystem`,
       options: {
