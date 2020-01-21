@@ -1,12 +1,10 @@
 module.exports = {
   siteMetadata: {
     title: `Gatsby Starter Blog`,
-    author: `Kyle Mathews`,
+    author: `Paul Henrot`,
     description: `A starter blog demonstrating what Gatsby can do.`,
     siteUrl: `https://gatsby-starter-blog-demo.netlify.com/`,
-    social: {
-      twitter: `kylemathews`,
-    },
+    mail: "henrot.paul@gmail.com"
   },
   plugins: [
     `gatsby-plugin-netlify-cms`, // install and add this plugin to link your blog to netlify cms
