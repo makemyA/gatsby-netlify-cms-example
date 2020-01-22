@@ -4,10 +4,17 @@ module.exports = {
     author: `Paul Henrot`,
     description: `A starter blog demonstrating what Gatsby can do.`,
     siteUrl: `https://gatsby-starter-blog-demo.netlify.com/`,
-    mail: "henrot.paul@gmail.com"
+    mail: "henrot.paul@gmail.com",
   },
   plugins: [
     `gatsby-plugin-netlify-cms`, // install and add this plugin to link your blog to netlify cms
+    {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        path: `${__dirname}/static/img`, //The path where netlify-cms will store all images you add from the cms
+        name: "uploads",
+      },
+    },
     {
       resolve: `gatsby-source-filesystem`,
       options: {
@@ -26,7 +33,13 @@ module.exports = {
       resolve: `gatsby-transformer-remark`,
       options: {
         plugins: [
-          `gatsby-remark-relative-images`,
+          {
+            resolve: `gatsby-remark-relative-images`,
+            options: {
+              name: "uploads", // the name should be the same than which one mentionned in gatsby-souce-filesystem
+            },
+          },
+
           {
             resolve: `gatsby-remark-images`,
             options: {

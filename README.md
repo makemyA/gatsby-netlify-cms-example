@@ -1,97 +1,237 @@
-<!-- AUTO-GENERATED-CONTENT:START (STARTER) -->
-<p align="center">
-  <a href="https://www.gatsbyjs.org">
-    <img alt="Gatsby" src="https://www.gatsbyjs.org/monogram.svg" width="60" />
-  </a>
-</p>
-<h1 align="center">
-  Gatsby's blog starter
-</h1>
+# Add netlify-cms to gatsby starter blog
 
-Kick off your project with this blog boilerplate. This starter ships with the main Gatsby configuration files you might need to get up and running blazing fast with the blazing fast app generator for React.
+## About
 
-_Have another more specific idea? You may want to check out our vibrant collection of [official and community-created starters](https://www.gatsbyjs.org/docs/gatsby-starters/)._
+A quick tutorial to explain how to manage images you add from the netlify-cms.
 
-## 🚀 Quick start
 
-1.  **Create a Gatsby site.**
+## Tutorial
 
-    Use the Gatsby CLI to create a new site, specifying the blog starter.
+### 1. Installation
 
-    ```shell
-    # create a new Gatsby site using the blog starter
-    gatsby new my-blog-starter https://github.com/gatsbyjs/gatsby-starter-blog
-    ```
+Follow [this instruction](https://www.netlifycms.org/docs/gatsby/) to link your gatsby-starter-blog to netlify-cms. Be careful to indentation when you copy/paste the **config.yml file**
 
-1.  **Start developing.**
+### 2. Gatsby-plugins
 
-    Navigate into your new site’s directory and start it up.
+A quick explanation about gatsby-plugins we will use for the image management. All these infos are copy/paste directly from [gatsby](https://www.gatsbyjs.org)
 
-    ```shell
-    cd my-blog-starter/
-    gatsby develop
-    ```
+- gatsby-source-filesystem
 
-1.  **Open the source code and start editing!**
+A Gatsby source plugin for sourcing data into your Gatsby application from your local filesystem.
 
-    Your site is now running at `http://localhost:8000`!
+The plugin creates File nodes from files. The various “transformer” plugins can transform File nodes into various other types of data e.g. gatsby-transformer-json transforms JSON files into JSON data nodes and gatsby-transformer-remark transforms markdown files into MarkdownRemark nodes from which you can query an HTML representation of the markdown.
 
-    _Note: You'll also see a second link: _`http://localhost:8000/___graphql`_. This is a tool you can use to experiment with querying your data. Learn more about using this tool in the [Gatsby tutorial](https://www.gatsbyjs.org/tutorial/part-five/#introducing-graphiql)._
+- gatsby-transformer-remark
 
-    Open the `my-blog-starter` directory in your code editor of choice and edit `src/pages/index.js`. Save your changes and the browser will update in real time!
+Parses Markdown files using Remark.
 
-## 🧐 What's inside?
+- gatsby-images
 
-A quick look at the top-level files and directories you'll see in a Gatsby project.
+Speedy, optimized images without the work.
 
-    .
-    ├── node_modules
-    ├── src
-    ├── .gitignore
-    ├── .prettierrc
-    ├── gatsby-browser.js
-    ├── gatsby-config.js
-    ├── gatsby-node.js
-    ├── gatsby-ssr.js
-    ├── LICENSE
-    ├── package-lock.json
-    ├── package.json
-    └── README.md
+gatsby-image is a React component specially designed to work seamlessly with Gatsby’s GraphQL queries. It combines Gatsby’s native image processing capabilities with advanced image loading techniques to easily and completely optimize image loading for your sites. gatsby-image uses gatsby-plugin-sharp to power its image transformations.
 
-1.  **`/node_modules`**: This directory contains all of the modules of code that your project depends on (npm packages) are automatically installed.
+Note: gatsby-image is not a drop-in replacement for <img />. It’s optimized for fixed width/height images and images that stretch the full-width of a container. Some ways you can use <img /> won’t work with gatsby-image.
 
-2.  **`/src`**: This directory will contain all of the code related to what you will see on the front-end of your site (what you see in the browser) such as your site header or a page template. `src` is a convention for “source code”.
+- gatsby-remark-relative-images
 
-3.  **`.gitignore`**: This file tells git which files it should not track / not maintain a version history for.
+Convert image src(s) in markdown to be relative to their node’s parent directory. This will help gatsby-remark-images match images outside the node folder. For example, use with NetlifyCMS.
 
-4.  **`.prettierrc`**: This is a configuration file for [Prettier](https://prettier.io/). Prettier is a tool to help keep the formatting of your code consistent.
+- gatsby-remark-images
 
-5.  **`gatsby-browser.js`**: This file is where Gatsby expects to find any usage of the [Gatsby browser APIs](https://www.gatsbyjs.org/docs/browser-apis/) (if any). These allow customization/extension of default Gatsby settings affecting the browser.
+Processes images in markdown so they can be used in the production build.
 
-6.  **`gatsby-config.js`**: This is the main configuration file for a Gatsby site. This is where you can specify information about your site (metadata) like the site title and description, which Gatsby plugins you’d like to include, etc. (Check out the [config docs](https://www.gatsbyjs.org/docs/gatsby-config/) for more detail).
+In the processing, it makes images responsive by:
 
-7.  **`gatsby-node.js`**: This file is where Gatsby expects to find any usage of the [Gatsby Node APIs](https://www.gatsbyjs.org/docs/node-apis/) (if any). These allow customization/extension of default Gatsby settings affecting pieces of the site build process.
+Adding an elastic container to hold the size of the image while it loads to avoid layout jumps.
+Generating multiple versions of images at different widths and sets the srcset and sizes of the img element so regardless of the width of the device, the correct image is downloaded.
+Using the “blur up” technique popularized by Medium and Facebook where a small 20px wide version of the image is shown as a placeholder until the actual image is downloaded.
 
-8.  **`gatsby-ssr.js`**: This file is where Gatsby expects to find any usage of the [Gatsby server-side rendering APIs](https://www.gatsbyjs.org/docs/ssr-apis/) (if any). These allow customization of default Gatsby settings affecting server-side rendering.
+- gatsby-transformer-sharp
 
-9.  **`LICENSE`**: Gatsby is licensed under the MIT license.
+Creates ImageSharp nodes from image types that are supported by the Sharp image processing library and provides fields in their GraphQL types for processing your images in a variety of ways including resizing, cropping, and creating responsive images.
 
-10. **`package-lock.json`** (See `package.json` below, first). This is an automatically generated file based on the exact versions of your npm dependencies that were installed for your project. **(You won’t change this file directly).**
+- gatsby-plugin-sharp
 
-11. **`package.json`**: A manifest file for Node.js projects, which includes things like metadata (the project’s name, author, etc). This manifest is how npm knows which packages to install for your project.
+Exposes several image processing functions built on the Sharp image processing library. This is a low-level helper plugin generally used by other Gatsby plugins. You generally shouldn’t be using this directly but might find it helpful if doing very custom image processing.
 
-12. **`README.md`**: A text file containing useful reference information about your project.
+It aims to provide excellent out-of-the box settings for processing common web image formats.
 
-## 🎓 Learning Gatsby
+For JPEGs it generates progressive images with a default quality level of 50.
 
-Looking for more guidance? Full documentation for Gatsby lives [on the website](https://www.gatsbyjs.org/). Here are some places to start:
+For PNGs it uses pngquant to compress images. By default it uses a quality setting of [50-75]. The pngCompressionSpeed value is a speed/quality trade-off from 1 (brute-force) to 10 (fastest). Speed 10 has 5% lower quality, but is 8 times faster than the default (4). In most cases you should stick with the default, but if you have very large numbers of PNGs then it can significantly reduce build times.
 
-- **For most developers, we recommend starting with our [in-depth tutorial for creating a site with Gatsby](https://www.gatsbyjs.org/tutorial/).** It starts with zero assumptions about your level of ability and walks through every step of the process.
+### 3. Install missing plugins and configure gatsby-config.js
 
-- **To dive straight into code samples, head [to our documentation](https://www.gatsbyjs.org/docs/).** In particular, check out the _Guides_, _API Reference_, and _Advanced Tutorials_ sections in the sidebar.
+All plugins are already include in gatsby-stater-blog except this one.
 
-## 💫 Deploy
+```js
+yarn add gatsby-remark-relative-images
+```
 
-[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/gatsbyjs/gatsby-starter-blog)
+Configure your gatsby-config.js
 
-<!-- AUTO-GENERATED-CONTENT:END -->
+```js
+plugins: [
+  `gatsby-plugin-netlify-cms`,
+  {
+    resolve: `gatsby-source-filesystem`, // install and add this plugin to link your blog to netlify cms
+    options: {
+      path: `${__dirname}/static/img`, //The path where netlify-cms will store all images you add from the cms
+      name: "uploads",
+    },
+  },
+  ...{
+    resolve: `gatsby-transformer-remark`,
+    options: {
+      plugins: [
+        {
+          resolve: `gatsby-remark-relative-images`, // Add our new plugin to current configuration
+          options: {
+            name: "uploads", // the name should be the same than which one mentionned in gatsby-souce-filesystem
+          },
+        },
+
+        {
+          resolve: `gatsby-remark-images`,
+          options: {
+            maxWidth: 590,
+          },
+        },
+        {
+          resolve: `gatsby-remark-responsive-iframe`,
+          options: {
+            wrapperStyle: `margin-bottom: 1.0725rem`,
+          },
+        },
+        `gatsby-remark-prismjs`,
+        `gatsby-remark-copy-linked-files`,
+        `gatsby-remark-smartypants`,
+      ],
+    },
+  },
+]
+```
+### 3. Configure gatsby-node.js
+
+We add this function to have access to our images relative path
+
+```js
+const { fmImagesToRelative } = require("gatsby-remark-relative-images")
+
+...
+
+exports.onCreateNode = ({ node, actions, getNode }) => {
+  const { createNodeField } = actions
+  fmImagesToRelative(node)
+  if (node.internal.type === `MarkdownRemark`) {
+    const value = createFilePath({ node, getNode })
+    createNodeField({
+      name: `slug`,
+      node,
+      value,
+    })
+  }
+}
+
+```
+
+### 5. Manage images uploaded from netlify-cms
+
+- add A new widget "image" in our config.yml to allow users of netlify cms to upload an image in their blog post
+
+```yml
+backend:
+  name: git-gateway
+  branch: master
+
+media_folder: static/img
+public_folder: /img
+
+collections:
+  - name: "blog"
+    label: "Blog"
+    folder: "content/blog"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    editor:
+      preview: false
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Publish Date", name: "date", widget: "datetime" }
+      - { label: "Description", name: "description", widget: "string" }
+      - { label: "Image", name: "image", widget: "image" } //our new Field
+      - { label: "Body", name: "body", widget: "markdown" }
+```
+
+- Configure the blog template
+
+In src/templates/blog-posts.js
+
+We import the Image component from gatsby-image, then we add the image field in graphql query.
+
+```js
+import Image from "gatsby-image"
+
+export const pageQuery = graphql`
+  query BlogPostBySlug($slug: String!) {
+    site {
+      siteMetadata {
+        title
+      }
+    }
+    markdownRemark(fields: { slug: { eq: $slug } }) {
+      id
+      excerpt(pruneLength: 160)
+      html
+      frontmatter {
+        title
+        date(formatString: "MMMM DD, YYYY")
+        description
+        image {
+          childImageSharp {
+            fluid {
+              ...GatsbyImageSharpFluid
+            }
+          }
+        }
+      }
+    }
+  }
+`
+```
+
+finally We can use our new Image component in our blog template.
+
+```js
+class BlogPostTemplate extends React.Component {
+  render() {
+    const post = this.props.data.markdownRemark
+    ...
+    return (
+      <Layout>
+        ...
+        <article>
+          <Image
+              fluid={post.frontmatter.image.childImageSharp.fluid}
+              alt="image"
+              style={{
+                marginRight: rhythm(1 / 2),
+                marginBottom: 0,
+                minWidth: 50,
+              }}
+              imgStyle={{
+              }}
+            />
+            <section dangerouslySetInnerHTML={{ __html: post.html }} />
+            <hr
+              style={{
+                marginBottom: rhythm(1),
+              }}
+            />
+        </article>
+        ...
+      </Layout>
+          )}}
+
+```
